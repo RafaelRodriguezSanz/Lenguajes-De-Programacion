@@ -1,0 +1,71 @@
+[package]
+name = "first_proyect"
+version = "0.1.0"
+edition = "2021"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# Serde: Biblioteca para serialización y deserialización de datos en formatos como JSON.
+#serde = "1.0"
+#serde_json = "1.0"
+
+# Tokio: Marco de programación asincrónico.
+#tokio = { version = "1", features = ["full"] }
+
+# Reqwest: Biblioteca para realizar solicitudes HTTP.
+#reqwest = "0.11"
+
+# Actix-web: Marco de desarrollo web asincrónico basado en actores.
+#actix-web = "4.3.1"
+
+# Chrono: Biblioteca para trabajar con fechas y tiempos.
+#chrono = "0.4"
+
+# Regex: Biblioteca para trabajar con expresiones regulares.
+#regex = "1.4"
+
+# Rand: Biblioteca para generar números aleatorios.
+#rand = "0.8"
+
+# Log y env_logger: Bibliotecas para el registro de eventos.
+#log = "0.4"
+#env_logger = "0.10"
+
+# UUID: Biblioteca para trabajar con identificadores únicos universales.
+#uuid = "1.4.1"
+
+# Num: Conjunto de bibliotecas para trabajar con tipos numéricos avanzados.
+#num = "0.4"
+
+# Lazy_static: Biblioteca para crear variables globales estáticas de manera perezosa.
+#lazy_static = "1.4"
+
+# Anyhow: Biblioteca para manejar errores de manera más conveniente.
+#anyhow = "1.0"
+
+# Clap: Biblioteca para analizar argumentos de línea de comandos.
+#clap = "4.3.21"
+
+# Rocket: Marco de desarrollo web elegante y fácil de usar.
+#rocket = "0.4.11"
+
+# Diesel: Marco ORM para trabajar con bases de datos.
+#diesel = { version = "2.1.0", features = ["sqlite"] }
+
+[dev-dependencies]
+# Serde y Serde_json para pruebas con serialización/deserialización
+#serde = "1.0"
+#serde_json = "1.0"
+
+# Proptest: Biblioteca para generación de propiedades y pruebas aleatorias
+#proptest = "1.0"
+
+# Mockall: Biblioteca para generar mocks automáticamente
+#mockall = "0.11.4"
