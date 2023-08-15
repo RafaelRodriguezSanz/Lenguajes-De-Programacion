@@ -658,3 +658,12 @@ Existen ciertas macros que funcionan para el testing.
 ### Integration Testing
 
 Las pruebas unitarias importan lo que se quiere testear y se prueban.
+
+```rust
+use first_proyect::suma;
+
+#[test]
+fn integration_test() {
+    assert_eq!(suma(2, 3), 5);
+}
+```
