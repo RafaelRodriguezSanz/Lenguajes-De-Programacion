@@ -296,7 +296,7 @@ for number in (1..4).rev() {
     }
 ```
 
-### Loop (Do While)
+### Loop (While true)
 
 ```rust
     loop {
