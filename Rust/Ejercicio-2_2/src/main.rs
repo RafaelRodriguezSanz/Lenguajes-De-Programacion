@@ -4,7 +4,7 @@ mod pile;
 mod extractor;
 mod attribute;
 use std::io::{self, Write, BufRead};
-use crate::pile::Pile;
+use crate::{pile::Pile, attribute::Attribute};
 
 fn main() {
     let mut pile: Pile = Pile::new();
@@ -18,17 +18,17 @@ fn main() {
             if !line.is_empty() {
                 let extraction = extractor::extract(&line);
                 for value in extraction {
-                    if let Some(parsed_operator) = parser::to_operator(&value) {
-                        if operator::operator::Operator::values().contains(&parsed_operator) {
-                            pile.operate(parsed_operator);
+                    let parsed_value = parser::parse_input(&value).unwrap();
+                    match parsed_value {
+                        Attribute::Operator(operator) => {
+                            pile.operate(operator);
                         }
-                    } else {
-                        if let Some(parsed_double) = parser::to_double(&value) {
-                            pile.push(parsed_double);
+                        Attribute::Number(number) => {
+                            pile.push(number);
                         }
                     }
                 }
-                println!("{:?}", pile.get_data())
+                println!("{}", pile.to_string())
             } else {
                 println!("Closing software...");
                 break;

@@ -1,12 +1,11 @@
 pub mod parser{
-    use std::{string::ParseError, num::ParseFloatError};
 
     use crate::{operator::operator::Operator, attribute::Attribute};
 
     pub fn to_double(input: &str)-> Option<f64> {
         match input.parse::<f64>() {
             Ok(number) => Some(number),
-            Err(err) => None
+            Err(_err) => None
         }
     }
 
