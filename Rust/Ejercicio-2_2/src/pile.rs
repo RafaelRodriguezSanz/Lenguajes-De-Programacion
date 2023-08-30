@@ -1,6 +1,7 @@
 
 pub mod pile {
-    use crate::operator::operator::Operator;
+    use crate::operator::operator::{Operator, Operable};
+
  
 
     pub struct Pile {
@@ -26,11 +27,21 @@ pub mod pile {
             format!("{:?}", self.data)
         }
 
-        pub fn operate(&mut self, operator:Operator) {
-            let last_operand = self.pop().unwrap();
-            let first_operand = self.pop().unwrap();
-            self.push(operator.operate(first_operand, last_operand));
-        }    
+        pub fn operate(&mut self, operator: Operator) {
+            match operator {
+                Operator::Unary(unary_op) => {
+                    let value = self.pop().unwrap();
+                    let result = unary_op.operate(value, None);
+                    self.push(result);
+                }
+                Operator::Binary(binary_op) => {
+                    let last_operand = self.pop().unwrap();
+                    let first_operand = self.pop().unwrap();
+                    let result = binary_op.operate(first_operand, Some(last_operand));
+                    self.push(result);
+                }
+            }
+        }  
     }
 }
 

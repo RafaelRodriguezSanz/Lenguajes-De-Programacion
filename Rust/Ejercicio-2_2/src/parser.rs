@@ -1,6 +1,7 @@
 pub mod parser{
 
-    use crate::{operator::operator::Operator, attribute::Attribute};
+    
+    use crate::{operator::{Operator, UnaryOperator, BinaryOperator}, attribute::Attribute};
 
     pub fn to_double(input: &str)-> Option<f64> {
         match input.parse::<f64>() {
@@ -11,9 +12,18 @@ pub mod parser{
 
     pub fn to_operator(input: &str) -> Option<Operator> {
         match input {
-            s if s == Operator::ADD.to_string() => Some(Operator::ADD),
-            s if s == Operator::SUB.to_string() => Some(Operator::SUB),
-            s if s == Operator::MULT.to_string() => Some(Operator::MULT),
+            s if s == UnaryOperator::NOT.to_string() => Some(Operator::Unary(UnaryOperator::NOT)),
+            s if s == BinaryOperator::ADD.to_string() => Some(Operator::Binary(BinaryOperator::ADD)),
+            s if s == BinaryOperator::SUB.to_string() => Some(Operator::Binary(BinaryOperator::SUB)),
+            s if s == BinaryOperator::MULT.to_string() => Some(Operator::Binary(BinaryOperator::MULT)),
+            s if s == BinaryOperator::EQ.to_string() => Some(Operator::Binary(BinaryOperator::EQ)),
+            s if s == BinaryOperator::DIFF.to_string() => Some(Operator::Binary(BinaryOperator::DIFF)),
+            s if s == BinaryOperator::LT.to_string() => Some(Operator::Binary(BinaryOperator::LT)),
+            s if s == BinaryOperator::LTE.to_string() => Some(Operator::Binary(BinaryOperator::LTE)),
+            s if s == BinaryOperator::GT.to_string() => Some(Operator::Binary(BinaryOperator::GT)),
+            s if s == BinaryOperator::GTE.to_string() => Some(Operator::Binary(BinaryOperator::GTE)),
+            s if s == BinaryOperator::AND.to_string() => Some(Operator::Binary(BinaryOperator::AND)),
+            s if s == BinaryOperator::OR.to_string() => Some(Operator::Binary(BinaryOperator::OR)),
             _ => None
         }
     }

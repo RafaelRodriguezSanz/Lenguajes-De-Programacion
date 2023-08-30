@@ -3,6 +3,7 @@ mod parser;
 mod pile;
 mod extractor;
 mod attribute;
+mod Operator;
 use std::io::{self, Write, BufRead};
 use crate::{pile::Pile, attribute::Attribute};
 
