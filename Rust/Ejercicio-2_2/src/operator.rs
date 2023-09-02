@@ -1,15 +1,36 @@
 use std::fmt;
+use std::f64::consts::PI;
+use std::f64;
 
 pub mod operator {
+    pub enum ZeroaryOperator {
+        PI
+    }
 
     pub enum UnaryOperator {
-        NOT
+        NOT,
+        COS
+    }
+
+    pub enum BinaryOperator {
+        ADD,
+        SUB,
+        MULT,
+        EQ,
+        DIFF,
+        LT,
+        LTE,
+        GT,
+        GTE,
+        AND,
+        OR
     }
 
     impl std::fmt::Display for UnaryOperator {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             match self {
                 UnaryOperator::NOT => write!(f, "NOT"),
+                UnaryOperator::COS => write!(f, "COS")
             }
         }
     }
@@ -32,58 +53,63 @@ pub mod operator {
         }
     }
 
-    pub enum BinaryOperator {
-        ADD,
-        SUB,
-        MULT,
-        EQ,
-        DIFF,
-        LT,
-        LTE,
-        GT,
-        GTE,
-        AND,
-        OR
+    impl std::fmt::Display for ZeroaryOperator {
+       fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+           match self {
+            ZeroaryOperator::PI => write!(f, "PI")
+           }
+       }
     }
 
     pub trait Operable {
-        fn operate(&self, x: f64, y: Option<f64>) -> f64;
+        fn operate(&self, x: Option<f64>, y: Option<f64>) -> f64;
+    }
+
+    impl Operable for ZeroaryOperator {
+        fn operate(&self, _first_value: Option<f64>, _second_value: Option<f64>) -> f64 {
+            match self {
+                ZeroaryOperator::PI => std::f64::consts::PI
+            }
+        }
     }
 
     impl Operable for UnaryOperator {
-        fn operate(&self, value: f64, _second_value: Option<f64>) -> f64 {
+        fn operate(&self, value: Option<f64>, _second_value: Option<f64>) -> f64 {
             match self {
-                UnaryOperator::NOT => if value == 0.0 { 1.0 } else { 0.0 }
+                UnaryOperator::NOT => if value.unwrap() == 0.0 { 1.0 } else { 0.0 },
+                UnaryOperator::COS => f64::cos(value.unwrap())
             }
         }
     }
 
     impl Operable for BinaryOperator {
-        fn operate(&self, x: f64, y: Option<f64>) -> f64 {
+        fn operate(&self, x: Option<f64>, y: Option<f64>) -> f64 {
             match self {
-                BinaryOperator::ADD => x + y.unwrap_or(0.0),
-                BinaryOperator::SUB => x - y.unwrap_or(0.0),
-                BinaryOperator::MULT => x * y.unwrap_or(1.0),
-                BinaryOperator::EQ => if x == y.unwrap_or(0.0) { 1.0 } else { 0.0 },
-                BinaryOperator::DIFF => if x != y.unwrap_or(0.0) { 1.0 } else { 0.0 },
-                BinaryOperator::LT => if x < y.unwrap_or(0.0) { 1.0 } else { 0.0 },
-                BinaryOperator::LTE => if x <= y.unwrap_or(0.0) { 1.0 } else { 0.0 },
-                BinaryOperator::GT => if x > y.unwrap_or(0.0) { 1.0 } else { 0.0 },
-                BinaryOperator::GTE => if x >= y.unwrap_or(0.0) { 1.0 } else { 0.0 },
-                BinaryOperator::AND => if x != 0.0 && y.unwrap_or(0.0) != 0.0 { 1.0 } else { 0.0 },
-                BinaryOperator::OR => if x != 0.0 || y.unwrap_or(0.0) != 0.0 { 1.0 } else { 0.0 }
+                BinaryOperator::ADD => x.unwrap_or(0.0) + y.unwrap_or(0.0),
+                BinaryOperator::SUB => x.unwrap_or(0.0) - y.unwrap_or(0.0),
+                BinaryOperator::MULT => x.unwrap_or(0.0) * y.unwrap_or(1.0),
+                BinaryOperator::EQ => if x.unwrap_or(0.0) == y.unwrap_or(0.0) { 1.0 } else { 0.0 },
+                BinaryOperator::DIFF => if x.unwrap_or(0.0) != y.unwrap_or(0.0) { 1.0 } else { 0.0 },
+                BinaryOperator::LT => if x.unwrap_or(0.0) < y.unwrap_or(0.0) { 1.0 } else { 0.0 },
+                BinaryOperator::LTE => if x.unwrap_or(0.0) <= y.unwrap_or(0.0) { 1.0 } else { 0.0 },
+                BinaryOperator::GT => if x.unwrap_or(0.0) > y.unwrap_or(0.0) { 1.0 } else { 0.0 },
+                BinaryOperator::GTE => if x.unwrap_or(0.0) >= y.unwrap_or(0.0) { 1.0 } else { 0.0 },
+                BinaryOperator::AND => if x.unwrap_or(0.0) != 0.0 && y.unwrap_or(0.0) != 0.0 { 1.0 } else { 0.0 },
+                BinaryOperator::OR => if x.unwrap_or(0.0) != 0.0 || y.unwrap_or(0.0) != 0.0 { 1.0 } else { 0.0 }
             }
         }
     }
 
     pub enum Operator {
+        Zeroary(ZeroaryOperator),
         Unary(UnaryOperator),
         Binary(BinaryOperator),
     }
 
     impl Operator {
-        pub fn operate(&self, x: f64, y: Option<f64>) -> f64 {
+        pub fn operate(&self, x: Option<f64>, y: Option<f64>) -> f64 {
             match self {
+                Operator::Zeroary(op) => op.operate(x, y),
                 Operator::Unary(op) => op.operate(x, y),
                 Operator::Binary(op) => op.operate(x, y),
             }
@@ -91,14 +117,17 @@ pub mod operator {
 
         pub fn to_string(&self) -> String {
             match self {
+                Operator::Zeroary(op) => op.to_string(),
                 Operator::Unary(op) => op.to_string(),
                 Operator::Binary(op) => op.to_string(),
             }
         }        
 
         pub fn values() -> Vec<String> {
-            let unary_values: Vec<String> = vec![UnaryOperator::NOT.to_string()];
-            let binary_values: Vec<String> = vec![
+            return vec![
+                UnaryOperator::COS.to_string(),
+                UnaryOperator::NOT.to_string(),
+                ZeroaryOperator::PI.to_string(),
                 BinaryOperator::ADD.to_string(),
                 BinaryOperator::SUB.to_string(),
                 BinaryOperator::MULT.to_string(),
@@ -111,8 +140,6 @@ pub mod operator {
                 BinaryOperator::AND.to_string(),
                 BinaryOperator::OR.to_string(),
             ];
-        
-            unary_values.into_iter().chain(binary_values).collect()
         }
     }
 
