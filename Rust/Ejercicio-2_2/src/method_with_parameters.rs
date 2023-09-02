@@ -89,3 +89,80 @@ pub mod method_with_parameters {
 }
 
 pub use method_with_parameters::{MethodWithParameters, UnaryMethodWithParameters};
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use method_with_parameters::*;
+
+    #[test]
+    fn test_set_method_with_parameters() {
+        let mut pile: Vec<f64> = vec![1.0, 2.0, 3.0];
+        let mut memory: Vec<f64> = vec![0.0, 0.0, 0.0];
+        let index = 1.0;
+        let set_method = MethodWithParameters::Unary(UnaryMethodWithParameters::SET, index);
+
+        let result = set_method.methodWithParameters(&mut pile, &mut memory, index);
+
+        assert_eq!(result, 3.0);
+        assert_eq!(pile, vec![1.0, 2.0]);
+        assert_eq!(memory, vec![0.0, 3.0, 0.0]);
+    }
+
+    #[test]
+    fn test_get_method_with_parameters() {
+        let mut pile: Vec<f64> = vec![1.0, 2.0, 3.0];
+        let mut memory: Vec<f64> = vec![0.0, 10.0, 20.0];
+        let index = 1.0;
+        let get_method = MethodWithParameters::Zeroary(ZeroaryMethodWithParameters::GET, index);
+
+        let result = get_method.methodWithParameters(&mut pile, &mut memory, index);
+
+        assert_eq!(result, 10.0); // El valor obtenido debe ser 10.0
+        assert_eq!(pile, vec![1.0, 2.0, 3.0, 10.0]);
+        assert_eq!(memory, vec![0.0, 10.0, 20.0]);
+    }
+
+    #[test]
+    fn test_method_with_parameters_to_string() {
+        let set_method = MethodWithParameters::Unary(UnaryMethodWithParameters::SET, 1.0);
+        let get_method = MethodWithParameters::Zeroary(ZeroaryMethodWithParameters::GET, 2.0);
+
+        assert_eq!(set_method.to_string(), "SET".to_string());
+        assert_eq!(get_method.to_string(), "GET".to_string());
+    }
+
+    #[test]
+    fn test_method_with_parameters_values() {
+        let values = MethodWithParameters::values();
+        assert_eq!(values, vec!["GET".to_string(), "SET".to_string()]);
+    }
+
+    #[test]
+    fn test_set_method_with_parameters_value_inserted() {
+        let mut pile: Vec<f64> = vec![7.5];
+        let mut memory: Vec<f64> = vec![0.0, 0.0, 0.0];
+        let index = 2.0;
+        let set_method = MethodWithParameters::Unary(UnaryMethodWithParameters::SET, index);
+
+        let result = set_method.methodWithParameters(&mut pile, &mut memory, index);
+
+        assert_eq!(result, 7.5);
+        assert_eq!(pile, vec![]); 
+        assert_eq!(memory, vec![0.0, 0.0, 7.5]); 
+    }
+
+    #[test]
+    fn test_get_method_with_parameters_value_pushed_to_pile() {
+        let mut pile: Vec<f64> = vec![];
+        let mut memory: Vec<f64> = vec![5.0, 8.0, 12.0];
+        let index = 0.0;
+        let get_method = MethodWithParameters::Zeroary(ZeroaryMethodWithParameters::GET, index);
+
+        let result = get_method.methodWithParameters(&mut pile, &mut memory, index);
+
+        assert_eq!(result, 5.0);
+        assert_eq!(pile, vec![5.0]);
+        assert_eq!(memory, vec![5.0, 8.0, 12.0]);
+    }
+}

@@ -7,7 +7,7 @@ pub mod variables {
     impl Variables {
         pub fn new(size: usize) -> Self {
             Self {
-                data: vec![0.0; size],
+                data: vec![f64::NAN; size],
             }
         }
     
@@ -27,3 +27,15 @@ pub mod variables {
 }
 
 pub use self::variables::Variables;
+
+#[cfg(test)]
+mod variables_tests {
+    use super::*;
+
+    #[test]
+    fn test_set_non_existing_variable() {
+        let mut variables = Variables::new(3);
+
+        assert_eq!(variables.set(3, 42.0), None);
+    }
+}

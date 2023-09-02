@@ -99,3 +99,62 @@ pub mod pile {
 }
 
 pub use self::pile::Pile;
+
+#[cfg(test)]
+mod pile_tests {
+    
+    use super::*;
+    use crate::operator::*;
+    use crate::method_with_parameters::method_with_parameters::*;
+    use crate::method::*;
+    use crate::operator::operator::*;
+
+    #[test]
+    fn test_push_and_pop() {
+        let mut pile = Pile::new();
+        pile.push(1.0);
+        pile.push(2.0);
+
+        assert_eq!(pile.pop(), Some(2.0));
+        assert_eq!(pile.pop(), Some(1.0));
+        assert_eq!(pile.pop(), None);
+    }
+
+    #[test]
+    fn test_operate_with_zeroary_operator() {
+        let mut pile = Pile::new();
+        pile.operate(Operator::Zeroary(ZeroaryOperator::PI));
+
+        assert_eq!(pile.pop(), Some(std::f64::consts::PI));
+    }
+
+    #[test]
+    fn test_operate_with_unary_operator() {
+        let mut pile = Pile::new();
+        pile.push(1.0);
+        pile.operate(Operator::Unary(UnaryOperator::COS));
+
+        assert_eq!(pile.pop(), Some(f64::cos(1.0)));
+    }
+
+    #[test]
+    fn test_operate_with_binary_operator() {
+        let mut pile = Pile::new();
+        pile.push(2.0);
+        pile.push(3.0);
+        pile.operate(Operator::Binary(BinaryOperator::ADD));
+
+        assert_eq!(pile.pop(), Some(5.0));
+    }
+
+    #[test]
+    fn test_method_zeroary() {
+        let mut pile = Pile::new();
+        pile.push(1.3);
+        let mut variables = Vec::new();
+        pile.method(Method::Zeroary(ZeroaryMethod::DUP), &mut variables);
+
+        assert_eq!(pile.pop(), Some(1.3));
+    }
+
+}

@@ -81,3 +81,16 @@ pub mod parser{
 }
 
 pub use self::parser::{parse_input, to_double, to_operator};
+
+#[cfg(test)]
+mod parser_tests {
+    
+    use super::*;
+
+    #[test]
+    fn test_to_double() {
+        assert_eq!(to_double("123.45"), Some(123.45));
+        assert_eq!(to_double("abc"), None);
+    }
+
+}
