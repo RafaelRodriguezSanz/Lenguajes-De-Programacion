@@ -2,6 +2,7 @@ pub mod pile {
 
     use crate::{
         method::{Method, ZeroaryMethod},
+        method_with_control_flow::{MethodWithControlFlow, UnaryMethodWithControlFlow, method_with_control_flow::ZeroaryMethodWithControlFlow},
         method_with_parameters::{MethodWithParameters, UnaryMethodWithParameters, method_with_parameters::ZeroaryMethodWithParameters},
         operator::operator::{Operable, Operator},
     };
@@ -89,6 +90,34 @@ pub mod pile {
                             &unary_mth,
                             &mut self.data,
                             variables,
+                            parameter
+                        );
+                    }
+                },
+            }
+        }
+
+        pub fn method_with_control_flow(&mut self, method: MethodWithControlFlow, offset:f64, control_flow: *mut usize) {
+            match method {
+                MethodWithControlFlow::Unary(unary_mth, parameter) => {
+                        let value = self.pop().unwrap();
+                        match unary_mth {
+                        UnaryMethodWithControlFlow::CJP => {
+                            crate::method_with_control_flow::method_with_control_flow::Methodable::method_with_control_flow(
+                                &unary_mth,
+                                offset,
+                                control_flow,
+                                value
+                            );
+                        }
+                    }
+                },
+                MethodWithControlFlow::Zeroary(zeroary_mth, parameter) => match zeroary_mth {
+                    ZeroaryMethodWithControlFlow::UJP => {
+                        crate::method_with_control_flow::method_with_control_flow::Methodable::method_with_control_flow(
+                            &zeroary_mth,
+                            offset,
+                            control_flow,
                             parameter
                         );
                     }

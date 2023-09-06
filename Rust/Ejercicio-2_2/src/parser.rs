@@ -1,13 +1,28 @@
 pub mod parser{
 
     
-    use crate::{operator::{Operator, UnaryOperator, BinaryOperator, operator::ZeroaryOperator}, attribute::Attribute, {method::{ZeroaryMethod}}, method::Method, method_with_parameters::{UnaryMethodWithParameters, MethodWithParameters, method_with_parameters::ZeroaryMethodWithParameters}};
+    use crate::{operator::{Operator, UnaryOperator, BinaryOperator, operator::ZeroaryOperator}, attribute::Attribute, {method::{ZeroaryMethod}}, method::Method, method_with_parameters::{UnaryMethodWithParameters, MethodWithParameters, method_with_parameters::ZeroaryMethodWithParameters}, method_with_control_flow::{MethodWithControlFlow, ZeroaryMethodWithControlFlow, UnaryMethodWithControlFlow}};
 
     pub fn to_double(input: &str)-> Option<f64> {
-        match input.parse::<f64>() {
-            Ok(number) => Some(number),
-            Err(_err) => None
-        }
+        if input.contains("+") {
+            match input.replace("+", "").parse::<f64>() {
+                Ok(number) => Some(number),
+                Err(_err) => None
+            }
+        } else {
+            if input.contains("-"){
+                match input.replace("-", "").parse::<f64>() {
+                    Ok(number) => Some(number * -1.0),
+                    Err(_err) => None
+                }
+            } else {
+                match input.parse::<f64>() {
+                    Ok(number) => Some(number),
+                    Err(_err) => None
+        
+                }
+            }
+        }    
     }
 
     pub fn to_operator(input: &str) -> Option<Operator> {
@@ -50,6 +65,18 @@ pub mod parser{
         }
     }    
 
+    pub fn to_method_with_control_flow(input: &str, value: f64) -> Option<MethodWithControlFlow> {
+        match input {
+            s if s == ZeroaryMethodWithControlFlow::UJP.to_string() => {
+                Some(MethodWithControlFlow::Zeroary(ZeroaryMethodWithControlFlow::UJP, value))
+            }
+            s if s == UnaryMethodWithControlFlow::CJP.to_string() => {
+                Some(MethodWithControlFlow::Unary(UnaryMethodWithControlFlow::CJP, value))
+            }
+            _ => None,
+        }
+    }    
+
     pub fn parse_input(input: &str) -> Option<Attribute> {
         if let Some(number) = to_double(input) {
             Some(Attribute::Number(number))
@@ -72,6 +99,13 @@ pub mod parser{
             else {
                 None
             }
+        } else if MethodWithControlFlow::values().contains(&input.split(":").next().unwrap().to_string()) {
+                if let Some(mth) = to_method_with_control_flow(input.split(":").collect::<Vec<_>>()[0], to_double(input.split(":").collect::<Vec<_>>()[1]).unwrap()) {
+                    Some(Attribute::MethodWithControlFlow(mth, to_double(input.split(":").collect::<Vec<_>>()[1]).unwrap()))
+                }
+                else {
+                    None
+                }
         } else {
             None
         }

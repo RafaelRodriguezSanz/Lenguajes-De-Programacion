@@ -5,6 +5,7 @@ mod extractor;
 mod attribute;
 mod method;
 mod method_with_parameters;
+mod method_with_control_flow;
 mod variables;
 use std::io::{self, Write, BufRead};
 use crate::{pile::Pile, attribute::Attribute, variables::Variables};
@@ -19,13 +20,18 @@ fn main() {
     print!("▶ ");
     io::stdout().flush().unwrap();
     for line in stdin.lock().lines() {
-        pile.data.clear();
+        //pile.data.clear();
         if let Ok(line) = line {
             if !line.is_empty() {
                 let extraction = extractor::extract(&line);
-                for value in extraction {
+                let mut i = 0;
+                while i != extraction.len(){
+                    let value = extraction.get(i).unwrap();
                     let parsed_value = parser::parse_input(&value).unwrap();
                     match parsed_value {
+                        Attribute::MethodWithControlFlow(method, offset) => {
+                            Pile::method_with_control_flow(&mut pile, method, offset-1.0,  &mut i as *mut usize);
+                        }
                         Attribute::MethodWithParameters(method, parameter) => {
                             Pile::method_with_parameters(&mut pile, method,  &mut variables.data, parameter);
                         }
@@ -39,6 +45,7 @@ fn main() {
                             pile.push(number);
                         }
                     }
+                    i+=1;
                 }
                 println!("{}", pile.to_string())
             } else {

@@ -1,6 +1,6 @@
 pub mod extractor {
     use regex::Regex;
-    use crate::{operator::operator::Operator, method::Method, method_with_parameters::MethodWithParameters};
+    use crate::{operator::operator::Operator, method::Method, method_with_parameters::MethodWithParameters, method_with_control_flow::{UnaryMethodWithControlFlow, MethodWithControlFlow}};
 
     pub fn extract(line: &str)-> Vec<String> {
         if line.len() < usize::MAX {
@@ -19,9 +19,15 @@ pub mod extractor {
             .map(|op| op.to_string().to_string())
             .collect();
 
-            let regex_pattern = format!(r"{}|{}|{}:\d+|\d+\.\d+|\d+",
+            let method_strings_with_control_flow: Vec<String> = MethodWithControlFlow::values()
+            .iter()
+            .map(|op| op.to_string().to_string())
+            .collect();
+
+            let regex_pattern = format!(r"{}|{}|{}|{}\:[-+]?\d+|\d+(\.\d+)?|\d+",  // Agregar [-+]?
             operator_strings.join(r"|"), method_strings.join(r"|"),
-            method_strings_with_parameters.join(r"\:\d+|"));
+            method_strings_with_parameters.join(r"\:\d+|"), 
+            method_strings_with_control_flow.join(r"\:[-+]?\d+|"));
             
             let regex = Regex::new(&regex_pattern).unwrap();
 
@@ -40,6 +46,7 @@ pub use self::extractor::extract;
 #[cfg(test)]
 mod unit_tests {
     use crate::{operator::Operator, method::Method, method_with_parameters::MethodWithParameters};
+    use super::*;
     use super::*;
 
     #[test]
