@@ -1,16 +1,22 @@
 module Main where
 
 import MiModulo
+import Json
 import Data.List.Split
 
 main :: IO ()
 main = do
-    putStrLn "Por favor, ingresa una lista de valores separados por comas:"
-    input <- getLine
-    if input == "salir"
-        then putStrLn "Hasta la vista, Baby! 😎"
-        else do
-            let valores = splitOn "," input
-            let resultado = if allEqual valores then "Son todos iguales" else "No son todos iguales"
-            putStrLn ("El resultado es: " ++ resultado)
-            main
+    --putStrLn "Please, enter csv a csv list of values:"
+    --input <- getLine
+    --if input == "exit"
+    --    then putStrLn "Hasta la vista, Baby! 😎"
+    --    else do
+    --        let valores = splitOn "," input
+    --        let resultado = if allEqual valores then "They are all equals" else "They are not all equals"
+    --        putStrLn ("Result: " ++ resultado)
+    --        main
+    let crearObjeto = JSONObject
+            [ ("id", JSONNumber 123),
+            ("value", JSONString "admin")
+            ]
+    putStrLn (show crearObjeto)
