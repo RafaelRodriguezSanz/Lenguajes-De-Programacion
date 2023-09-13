@@ -1,4 +1,4 @@
-module MiModulo where
+module AllEquals where
 
 allEqual :: Eq a => [a] -> Bool
 allEqual [] = True

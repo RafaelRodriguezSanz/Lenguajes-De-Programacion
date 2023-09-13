@@ -71,7 +71,6 @@ executable firstPackage
     build-depends:           base >= 4.17.2.0,
                              containers >= 0.6 && < 0.7,
                              split >= 0.2
-                             --QuickCheck
     -- Directories containing source files.
     hs-source-dirs:   app
 
