@@ -15,7 +15,7 @@ main = do
   case parseSchemyExp line of
     Left err -> putStrLn ("Error al parsear la expresión: " ++ show err)
     Right exp -> do
+      putStrLn $ "Expresión: " ++ show exp
       let result = eval basicEnv exp
       putStrLn ("Resultado: " ++ show result)
-
   main

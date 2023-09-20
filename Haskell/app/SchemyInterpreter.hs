@@ -59,6 +59,8 @@ right (SchemyBool b) = b
 right _ = error "Se esperaba un SchemyBool"
 
 instance Show SchemyExp where
+    show (SchemyValue (SchemyBool b)) = show b
+    show (SchemyValue (SchemyNumber n)) = show n
     show (SchemySymbol s) = s
     show (SchemyAdd a b) = "(" ++ show a ++ ")" ++ " + " ++ "(" ++ show b ++ ")" 
     show (SchemyMult c d) = "(" ++ show c ++  ")" ++ " * " ++ "(" ++ show d ++ ")" 
@@ -71,7 +73,6 @@ instance Show SchemyExp where
     show (SchemyLessThan a b) = "(" ++ show a ++  ")" ++ " < " ++ "(" ++ show b ++ ")"
     show (SchemyNotEqual a b) = "(" ++ show a ++  ")" ++ " != " ++ "(" ++ show b ++ ")"
     show (SchemyOr a b) = "(" ++ show a ++  ") || (" ++ show b ++ ")"
-
     
 instance Show SchemyValue where
     show (SchemyNumber n) = show n
