@@ -17,5 +17,5 @@ main = do
     Right exp -> do
       putStrLn $ "Expresión: " ++ show exp
       let result = eval basicEnv exp
-      putStrLn ("Resultado: " ++ show result)
+      putStrLn $ "Resultado: " ++ show result
   main

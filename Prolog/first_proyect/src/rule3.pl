@@ -1,0 +1,1 @@
+rule3(A,B,C,X) :- var(X), X is B * C / A.
