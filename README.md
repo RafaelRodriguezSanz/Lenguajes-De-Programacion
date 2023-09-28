@@ -1,11 +1,7 @@
 # Lenguajes-De-Programacion
 
-[Programacion Imperativa](./Rust)
-
-[Programacion Orientada a Objetos](./Ruby)
-
-[Programacion Funcional](./Haskell)
-
-[Programacion Logica](./Prolog)
-
-[Programacion Asincrona](./JavaScript)
+* [Programacion Imperativa](./Rust) 🚔
+* [Programacion Funcional](./Haskell) 📈
+* [Programacion Logica](./Prolog) 📜
+* [Programacion Orientada a Objetos](./Ruby) ⚽
+* [Programacion Asincrona](./JavaScript) ☎
