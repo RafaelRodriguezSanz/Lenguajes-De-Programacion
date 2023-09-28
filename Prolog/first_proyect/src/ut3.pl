@@ -1,5 +1,5 @@
-languae(ut1, rust).
-languae(ut2, haskell).
-languae(ut3, prolog).
-languae(ut4, ruby).
-languae(ut5, javascript).
+language(ut1, rust).
+language(ut2, haskell).
+language(ut3, prolog).
+language(ut4, ruby).
+language(ut5, javascript).
