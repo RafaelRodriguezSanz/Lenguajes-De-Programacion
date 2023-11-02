@@ -19,6 +19,7 @@ ARGF.each do |line|
         ast = parser.parse_string(code)
         puts "Exp> #{ast.unparse}"
         puts "Res> #{ast.evaluate}"
+        puts "Vars> #{ast.variables(ast.evaluate)}"
       rescue => error
         STDERR.puts "#{error.class}: #{error.message}"
       ensure

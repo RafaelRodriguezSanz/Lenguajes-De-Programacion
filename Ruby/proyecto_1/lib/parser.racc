@@ -41,10 +41,10 @@ rule
   exp
     : ID
       { VariableExp.new(val[0]) }
-    | NUM
-      { Numeral.new(val[0]) }
     | BOOL
-      { TruthValue.new(val[0]) }
+      { ExpressionFactory.instance.create(val[0]) }
+    | NUM_INST
+      { ExpressionFactory.instance.create(val[0]) }
     | '-' exp =UMINUS
       { Minus.new(val[1]) }
     | '!' exp
@@ -82,9 +82,11 @@ end
 
 require 'strscan'
 require_relative 'expressions'
+require_relative 'expressionFactory'
 require_relative 'statements'
 
 class Lexer
+  NUMBER_INSTANCES = /(10|[0-9])/
   NUMBER = /\d+(\.\d+)?/
   BOOL = /true|false/
   KEYWORDS = /if|else|while|print/
@@ -100,6 +102,7 @@ class Lexer
     @ss.scan(IGNORE)
     return if @ss.eos?
     case
+    when text = @ss.scan(NUMBER_INSTANCES) then [:NUM_INST, text.to_i]
     when text = @ss.scan(NUMBER) then [:NUM, text.to_f]
     when text = @ss.scan(BOOL) then [:BOOL, text == "true"]
     when text = @ss.scan(KEYWORDS) then [text, text]

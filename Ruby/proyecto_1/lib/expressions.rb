@@ -11,8 +11,15 @@ class Expression
 
   # Returns the evaluation of this expression. The `state` argument must be a
   # `Hash` mapping variable names to values.
-  def evaluate(state)
+  def evaluate(state = {})
     throw "#{self.class.name}.evaluate() is not implemented!"
+  end
+
+  # Returns the `List` of variables. The `state` argument must be a
+  # `Hash` mapping variable names of variables to their values.
+  def variables(state = {})
+    return [] unless state.is_a?(Hash)
+    return state.keys
   end
 end
 
@@ -42,10 +49,10 @@ end
 
 # Representation of numerals (i.e. numerical literals), e.g. `(123)`.
 class Numeral < Expression
+
   def initialize(value)
     @value = Float(value)
   end
-
   attr_reader :value
 
   def unparse()
@@ -310,11 +317,11 @@ class LogicalAnd < Expression
   end
 
   def unparse()
-    "(#{@right.unparse()} && #{@left.unparse()} )"
+    "(#{@left.unparse()} && #{@right.unparse()} )"
   end
 
   def evaluate(state = {})
-    @right.evaluate(state) && @left.evaluate(state)
+    @left.evaluate(state) && @right.evaluate(state)
   end
 
   attr_reader :left
@@ -329,11 +336,11 @@ class LogicalOr < Expression
   end
 
   def unparse()
-    "(#{@right.unparse()} || #{@left.unparse()} )"
+    "(#{@left.unparse()} || #{@right.unparse()} )"
   end
 
   def evaluate(state = {})
-    @right.evaluate(state) || @left.evaluate(state)
+    @left.evaluate(state) || @right.evaluate(state)
   end
 
   attr_reader :left

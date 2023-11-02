@@ -1,0 +1,11 @@
+task :default => [:run]
+
+task :run do
+  sh "ruby lib/main.rb"
+end
+
+task :test do
+  Dir.glob("specs/*Test.rb").each do |file|
+    sh "ruby #{file}"
+  end
+end

@@ -15,6 +15,13 @@ class Statement
   def evaluate(state = {})
     throw "#{self.class.name}.evaluate() is not implemented!"
   end
+
+  # Returns the `List` of variables. The `state` argument must be a
+  # `Hash` mapping variable names of variables to their values.
+  def variables(state = {})
+    return [] unless state.is_a?(Hash)
+    return state.keys
+  end
 end
 
 # Representation of assignments, e.g. `identifier = expression;`.
@@ -128,7 +135,7 @@ class PrintStmt < Statement
   end
 
   def unparse()
-    "print (#{@expression});"
+    "print (#{@expression.unparse()});"
   end
 
   def evaluate(state = {})

@@ -9,9 +9,11 @@ require 'racc/parser.rb'
 
 require 'strscan'
 require_relative 'expressions'
+require_relative 'expressionFactory'
 require_relative 'statements'
 
 class Lexer
+  NUMBER_INSTANCES = /(10|[0-9])/
   NUMBER = /\d+(\.\d+)?/
   BOOL = /true|false/
   KEYWORDS = /if|else|while|print/
@@ -27,6 +29,7 @@ class Lexer
     @ss.scan(IGNORE)
     return if @ss.eos?
     case
+    when text = @ss.scan(NUMBER_INSTANCES) then [:NUM_INST, text.to_i]
     when text = @ss.scan(NUMBER) then [:NUM, text.to_f]
     when text = @ss.scan(BOOL) then [:BOOL, text == "true"]
     when text = @ss.scan(KEYWORDS) then [text, text]
@@ -40,7 +43,7 @@ end
 
 class Parser < Racc::Parser
 
-module_eval(<<'...end parser.racc/module_eval...', 'parser.racc', 115)
+module_eval(<<'...end parser.racc/module_eval...', 'parser.racc', 118)
 
 def next_token
   @lexer.next_token
@@ -254,8 +257,8 @@ racc_token_table = {
   "else" => 24,
   "while" => 25,
   "print" => 26,
-  :NUM => 27,
-  :BOOL => 28 }
+  :BOOL => 27,
+  :NUM_INST => 28 }
 
 racc_nt_base = 29
 
@@ -305,8 +308,8 @@ Racc_token_to_s_table = [
   "\"else\"",
   "\"while\"",
   "\"print\"",
-  "NUM",
   "BOOL",
+  "NUM_INST",
   "$start",
   "target",
   "stmt",
@@ -393,13 +396,13 @@ module_eval(<<'.,.,', 'parser.racc', 42)
 
 module_eval(<<'.,.,', 'parser.racc', 44)
   def _reduce_13(val, _values)
-     Numeral.new(val[0])
+     ExpressionFactory.instance.create(val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'parser.racc', 46)
   def _reduce_14(val, _values)
-     TruthValue.new(val[0])
+     ExpressionFactory.instance.create(val[0])
   end
 .,.,
 
