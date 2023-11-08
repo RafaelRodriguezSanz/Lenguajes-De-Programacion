@@ -1,0 +1,19 @@
+{
+  "name": "first-proyect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "js": "node ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm install && webpack",
+    "clean": "if exist dist rmdir /s /q dist && if exist node_modules rmdir /s /q ./node_modules"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
