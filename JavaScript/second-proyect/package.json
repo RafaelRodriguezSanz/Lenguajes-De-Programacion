@@ -6,7 +6,7 @@
   "scripts": {
     "main": "node ./src/index.js",
     "test": "mocha ./test",
-    "report": "if exist dist rmdir /s /q dist && mkdir dist && mocha --reporter mochawesome && start ./mochawesome-report/mochawesome.htm",
+    "report": "mocha --reporter mochawesome && start ./mochawesome-report/mochawesome.html",
     "build": "npm install && webpack",
     "clean": "if exist dist rmdir /s /q dist && if exist node_modules rmdir /s /q ./node_modules"
   },
